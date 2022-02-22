@@ -43,9 +43,27 @@ https://linux.cn/lfs/LFS-BOOK-7.7-systemd/index.html
     ranger      文件浏览
     lsblk	查看磁盘挂载
 
+**内核模块管理**
+
+    存放内核模块的目录 /lib/modules/*/kemel
+    lsmod       查看系统安装了哪些模块
+    内核模块的添加与删除
+    depmod      扫描新添加的模块
+    modprobe (name)     安装(name)模块
+
 **进程管理**
 
     kill pid    杀掉进程
+
+**系统服务管理**
+
+    systemdctl  [start stop restart restartload]    启动,停止,重启,重载
+    systemdctl  status (name)   查看启动状态
+    systemdctl  enable (name)   设为开机启动
+    systemdctl  disable (name)  禁用开机启动
+    systemdctl  is-enable (name)  查看是否开机启动
+    systemdctl  list-units      列出激活的单元
+    systemdctl  list-units -t service  列出有活动的服务
 
 **暂停并在后台运行命令**
 
