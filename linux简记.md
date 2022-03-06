@@ -9,7 +9,8 @@ description: linux命令这么多我该怎么记-如何查找Linux的命令
 **linux命令这么多我该怎么记-如何查找Linux的命令**
 https://linux.cn/lfs/LFS-BOOK-7.7-systemd/index.html
 
-*find        查找*
+**find        查找**
+
 > -name         名称
   -maxdepth     递归层级(大)  
   -mindepth     递归层级(小)  
