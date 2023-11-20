@@ -11,6 +11,19 @@ description: linux命令这么多我该怎么记-如何查找Linux的命令
 
 https://linux.cn/lfs/LFS-BOOK-7.7-systemd/index.html
 
+### 用户和组管理
+
+```bash
+chown       修改文件所有者(属主)
+whoami      查看当前用户
+useradd     创建用户
+usermod -aG 群组 username 将用户加入群组，用逗号分隔
+userdel -r username    删除用户
+id [user]   查看用户的详细信息包括相关用户组
+gpasswd -a [用户名] [组名] 将用户添加到组
+groupdel [组名]         删除用户组
+```
+
 **find        查找**
 
 > -name         名称
@@ -33,9 +46,6 @@ nl          查看文件内容会显示行号
 wc          统计文件信息
 type        查看是不是shell自带命令
 history     查看最近的所有命令可以陪grep使用，效果更好
-whoami      查看当前用户
-useradd     创建用户
-chown       修改文件所有者(属主)
 alias       取别名
 df -h       显示已经挂载的分区列表和磁盘使用情况
 du -sh      查看目录占用空间
@@ -48,6 +58,7 @@ lsblk    查看磁盘挂载
 kpartx -av  img文件不允许挂载时可先执行kpartx -av **.img后mount /dev/loop0 xxx
 mkisofs     创建ISO镜像，-o 指定输出目录和文件名 例：mkiso -o /path/to/output.iso /path/to/www
 uniq -u     显示唯一的行
+uniq -d     显示重复行
 comm        按行对比文件(并集，差集，交集)
 ```
 
@@ -60,9 +71,9 @@ crontab -e  (* * * * * 用户 命令)
 **内核模块管理**
 
 ```bash
-存放内核模块的目录 /lib/modules/*/kemel
+/lib/modules/*/kernel    存放内核模块的目录 
 lsmod       查看系统安装了哪些模块
-内核模块的添加与删除
+# 内核模块的添加与删除
 depmod      扫描新添加的模块
 modprobe (name)     安装(name)模块
 ```
@@ -76,13 +87,55 @@ kill pid    杀掉进程
 **系统服务管理**
 
 ```bash
-systemctl  [start stop restart restartload]    启动,停止,重启,重载
-systemctl  status (name)   查看启动状态
-systemctl  enable (name)   设为开机启动
-systemctl  disable (name)  禁用开机启动
-systemctl  is-enable (name)  查看是否开机启动
-systemctl  list-units      列出激活的单元
-systemctl  list-units -t service  列出有活动的服务
+systemctl [start stop restart restartload]    启动,停止,重启,重载
+systemctl status          显示系统启动状态
+systemctl status (name)   查看启动状态
+systemctl enable (name)   设为开机启动
+systemctl disable (name)  禁用开机启动
+systemctl is-enable (name)  查看是否开机启动
+systemctl list-units      列出正在运行的单元
+systemctl list-units -t service  列出有活动的服务
+systemctl --failed        列出失败的单元
+systemctl [start stop] firewalld   启动或关闭防火墙，firewalld为防火墙服务
+systemctl help [单元]     显示单元手册页(如果单元支持)
+跟操作界面相关
+systemctl get-default     检查当前的默认启动目标
+    graphical.target          文字加图形界面
+    multi-user.target         纯文本模式
+进入文本模式，反之由 multi-user 转 graphical
+systemctl get-degault   查看默认模式，图形加文本为graphical
+systemctl set-default multi-user.target 设置默认为文本模式
+systemctl isolate multi-user.target     不重新开机的情况将操作环境改为纯文本模式
+systemctl isolate graphical.target      进入图形界面
+systemctl   电源
+    poweroff    系统关机
+    reboot      重新开机
+    suspend     暂停模式
+    hibernate   休眠模式
+    rescue      强制进入救援模式
+    emergency   强制进入紧急救援模式
+跟踪目标间的依赖
+systemctl list-dependencies         树状显示目前 target 环境下用到什么 unit
+systemctl list-dependencies graphical.target        target 下用到什么 unit
+systemctl list-dependencies [unit] --reverse    反向追踪谁会用到这个 unit
+```
+
+#### 系统日志
+
+```bash
+/var/log/message        核心系统日志文件,系统启动引导，运行状态，错误信息
+/var/log/dmesg          核心启动日志，启动时会在屏幕显示与硬件有关的信息，
+                        这些信息会保存在这个文件。
+/var/log/auth.log 或 /var/log/secure
+                        存储来自可插拔认证模块(PAM)的日志
+/var/log/journal        systemd自己提供的日志系统，存放目录
+journalctl              读取日志(systemd)
+journalctl -b           本次启动的所有日志
+journalctl -p err..alert      只显示错误冲突和重要告警信息
+journalctl --vacuum-time=2weeks 清理两周前的日志，如果日志没有设置限定大小会越来，
+                        这时候就需要手工清理
+deesg                   显示系统的启动信息
+last                    登陆记录
 ```
 
 **卸载桌面环境**
@@ -99,7 +152,6 @@ ctrl + z    暂停应用程序
 bg          让其在后台运行
 fg          重新将运用程序唤到前台
 ```
-
 **linux命令行快捷键**
 
     ctrl + u    剪切光标前的内容
